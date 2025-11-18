@@ -1,0 +1,510 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:template_name",
+ "creation": "2025-11-18 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "basic_info_section",
+  "template_name",
+  "doctype_link",
+  "column_break_template",
+  "is_default",
+  "is_active",
+  "is_public",
+  "description",
+  "editor_sections_tab",
+  "header_section",
+  "header",
+  "body_section",
+  "body",
+  "footer_section",
+  "footer",
+  "configuration_tab",
+  "field_mappings_section",
+  "field_mappings",
+  "child_table_section",
+  "child_table_config",
+  "loop_templates",
+  "styling_tab",
+  "custom_css_section",
+  "custom_css",
+  "page_setup_section",
+  "page_size",
+  "page_orientation",
+  "column_break_page",
+  "margin_top",
+  "margin_bottom",
+  "margin_left",
+  "margin_right",
+  "advanced_tab",
+  "watermark_section",
+  "enable_watermark",
+  "watermark_text",
+  "watermark_image",
+  "header_footer_section",
+  "enable_header_footer",
+  "page_numbering",
+  "page_number_format",
+  "conditional_logic_section",
+  "conditions",
+  "computed_fields",
+  "localization_tab",
+  "language_section",
+  "language",
+  "date_format",
+  "column_break_locale",
+  "number_format",
+  "currency_format",
+  "version_control_tab",
+  "version_section",
+  "version",
+  "parent_template",
+  "change_log",
+  "access_control_tab",
+  "roles_section",
+  "allowed_roles",
+  "metadata_tab",
+  "usage_section",
+  "usage_count",
+  "last_used",
+  "column_break_meta",
+  "created_by",
+  "tags"
+ ],
+ "fields": [
+  {
+   "fieldname": "basic_info_section",
+   "fieldtype": "Section Break",
+   "label": "Basic Information"
+  },
+  {
+   "fieldname": "template_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Template Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "doctype_link",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Doctype",
+   "options": "DocType",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_template",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_default",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Default"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Active"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_public",
+   "fieldtype": "Check",
+   "label": "Is Public"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "editor_sections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Editor"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "header_section",
+   "fieldtype": "Section Break",
+   "label": "Header Section"
+  },
+  {
+   "description": "Header content that appears on every page",
+   "fieldname": "header",
+   "fieldtype": "HTML Editor",
+   "label": "Header"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "body_section",
+   "fieldtype": "Section Break",
+   "label": "Body Section"
+  },
+  {
+   "description": "Main body content of the template",
+   "fieldname": "body",
+   "fieldtype": "HTML Editor",
+   "label": "Body"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "footer_section",
+   "fieldtype": "Section Break",
+   "label": "Footer Section"
+  },
+  {
+   "description": "Footer content that appears on every page",
+   "fieldname": "footer",
+   "fieldtype": "HTML Editor",
+   "label": "Footer"
+  },
+  {
+   "fieldname": "configuration_tab",
+   "fieldtype": "Tab Break",
+   "label": "Configuration"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "field_mappings_section",
+   "fieldtype": "Section Break",
+   "label": "Field Mappings"
+  },
+  {
+   "description": "JSON object mapping custom field names to actual field names. Example: {\"inv_no\": \"name\", \"cust\": \"customer_name\"}",
+   "fieldname": "field_mappings",
+   "fieldtype": "Code",
+   "label": "Field Mappings",
+   "options": "JSON"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "child_table_section",
+   "fieldtype": "Section Break",
+   "label": "Child Table Configuration"
+  },
+  {
+   "description": "JSON object defining child table field mappings",
+   "fieldname": "child_table_config",
+   "fieldtype": "Code",
+   "label": "Child Table Config",
+   "options": "JSON"
+  },
+  {
+   "description": "Loop templates for iterating child tables. Example: {% for row in items %} ... {% endfor %}",
+   "fieldname": "loop_templates",
+   "fieldtype": "Code",
+   "label": "Loop Templates",
+   "options": "HTML"
+  },
+  {
+   "fieldname": "styling_tab",
+   "fieldtype": "Tab Break",
+   "label": "Styling"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "custom_css_section",
+   "fieldtype": "Section Break",
+   "label": "Custom CSS"
+  },
+  {
+   "description": "Custom CSS styling for the template",
+   "fieldname": "custom_css",
+   "fieldtype": "Code",
+   "label": "Custom CSS",
+   "options": "CSS"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "page_setup_section",
+   "fieldtype": "Section Break",
+   "label": "Page Setup"
+  },
+  {
+   "default": "A4",
+   "fieldname": "page_size",
+   "fieldtype": "Select",
+   "label": "Page Size",
+   "options": "A4\nLetter\nLegal\nA5\nA3\nCustom"
+  },
+  {
+   "default": "Portrait",
+   "fieldname": "page_orientation",
+   "fieldtype": "Select",
+   "label": "Page Orientation",
+   "options": "Portrait\nLandscape"
+  },
+  {
+   "fieldname": "column_break_page",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "15",
+   "description": "Top margin in mm",
+   "fieldname": "margin_top",
+   "fieldtype": "Data",
+   "label": "Margin Top (mm)"
+  },
+  {
+   "default": "15",
+   "description": "Bottom margin in mm",
+   "fieldname": "margin_bottom",
+   "fieldtype": "Data",
+   "label": "Margin Bottom (mm)"
+  },
+  {
+   "default": "15",
+   "description": "Left margin in mm",
+   "fieldname": "margin_left",
+   "fieldtype": "Data",
+   "label": "Margin Left (mm)"
+  },
+  {
+   "default": "15",
+   "description": "Right margin in mm",
+   "fieldname": "margin_right",
+   "fieldtype": "Data",
+   "label": "Margin Right (mm)"
+  },
+  {
+   "fieldname": "advanced_tab",
+   "fieldtype": "Tab Break",
+   "label": "Advanced"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "watermark_section",
+   "fieldtype": "Section Break",
+   "label": "Watermark"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_watermark",
+   "fieldtype": "Check",
+   "label": "Enable Watermark"
+  },
+  {
+   "depends_on": "enable_watermark",
+   "fieldname": "watermark_text",
+   "fieldtype": "Data",
+   "label": "Watermark Text"
+  },
+  {
+   "depends_on": "enable_watermark",
+   "fieldname": "watermark_image",
+   "fieldtype": "Attach Image",
+   "label": "Watermark Image"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "header_footer_section",
+   "fieldtype": "Section Break",
+   "label": "Header & Footer Options"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_header_footer",
+   "fieldtype": "Check",
+   "label": "Enable Header/Footer on All Pages"
+  },
+  {
+   "default": "1",
+   "fieldname": "page_numbering",
+   "fieldtype": "Check",
+   "label": "Enable Page Numbering"
+  },
+  {
+   "default": "Page {page} of {total}",
+   "depends_on": "page_numbering",
+   "fieldname": "page_number_format",
+   "fieldtype": "Data",
+   "label": "Page Number Format"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "conditional_logic_section",
+   "fieldtype": "Section Break",
+   "label": "Conditional Logic"
+  },
+  {
+   "description": "JSON array of conditions for showing/hiding sections",
+   "fieldname": "conditions",
+   "fieldtype": "Code",
+   "label": "Conditions",
+   "options": "JSON"
+  },
+  {
+   "description": "Python code for computed fields (use safe_eval)",
+   "fieldname": "computed_fields",
+   "fieldtype": "Code",
+   "label": "Computed Fields",
+   "options": "Python"
+  },
+  {
+   "fieldname": "localization_tab",
+   "fieldtype": "Tab Break",
+   "label": "Localization"
+  },
+  {
+   "fieldname": "language_section",
+   "fieldtype": "Section Break",
+   "label": "Language & Formatting"
+  },
+  {
+   "fieldname": "language",
+   "fieldtype": "Link",
+   "label": "Language",
+   "options": "Language"
+  },
+  {
+   "fieldname": "date_format",
+   "fieldtype": "Data",
+   "label": "Date Format"
+  },
+  {
+   "fieldname": "column_break_locale",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "number_format",
+   "fieldtype": "Data",
+   "label": "Number Format"
+  },
+  {
+   "fieldname": "currency_format",
+   "fieldtype": "Data",
+   "label": "Currency Format"
+  },
+  {
+   "fieldname": "version_control_tab",
+   "fieldtype": "Tab Break",
+   "label": "Version Control"
+  },
+  {
+   "fieldname": "version_section",
+   "fieldtype": "Section Break",
+   "label": "Version Information"
+  },
+  {
+   "default": "1.0",
+   "fieldname": "version",
+   "fieldtype": "Data",
+   "label": "Version"
+  },
+  {
+   "fieldname": "parent_template",
+   "fieldtype": "Link",
+   "label": "Parent Template (Cloned From)",
+   "options": "PrintNebula Template"
+  },
+  {
+   "fieldname": "change_log",
+   "fieldtype": "Text",
+   "label": "Change Log"
+  },
+  {
+   "fieldname": "access_control_tab",
+   "fieldtype": "Tab Break",
+   "label": "Access Control"
+  },
+  {
+   "fieldname": "roles_section",
+   "fieldtype": "Section Break",
+   "label": "Allowed Roles"
+  },
+  {
+   "fieldname": "allowed_roles",
+   "fieldtype": "Table",
+   "label": "Allowed Roles",
+   "options": "PrintNebula Template Role"
+  },
+  {
+   "fieldname": "metadata_tab",
+   "fieldtype": "Tab Break",
+   "label": "Metadata"
+  },
+  {
+   "fieldname": "usage_section",
+   "fieldtype": "Section Break",
+   "label": "Usage Statistics"
+  },
+  {
+   "default": "0",
+   "fieldname": "usage_count",
+   "fieldtype": "Int",
+   "label": "Usage Count",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_used",
+   "fieldtype": "Datetime",
+   "label": "Last Used",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_meta",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "created_by",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tags",
+   "fieldtype": "Data",
+   "label": "Tags"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-11-18 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "F Printnebula",
+ "name": "PrintNebula Template",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Administrator",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "template_name",
+ "track_changes": 1
+}
