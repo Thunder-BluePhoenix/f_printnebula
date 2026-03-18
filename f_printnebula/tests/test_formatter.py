@@ -16,13 +16,12 @@ class TestFormatterEngine(unittest.TestCase):
 	def test_format_currency(self):
 		"""Test currency formatting"""
 		result = self.formatter.format(1234.56, "currency")
-		self.assertIn("1234.56", result)
 		self.assertIn("1,234.56", result)
 
 	def test_format_number(self):
 		"""Test number formatting"""
 		result = self.formatter.format(1234.567, "number:2")
-		self.assertIn("1234.57", result)
+		self.assertIn("1,234.57", result)
 
 	def test_format_int(self):
 		"""Test integer formatting"""

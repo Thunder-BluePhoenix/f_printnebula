@@ -32,7 +32,7 @@ class FormatterEngine:
 		Returns:
 			Formatted value as string
 		"""
-		if value is None or value == "":
+		if (value is None or value == "") and not formatter.startswith("default"):
 			return ""
 
 		# Parse formatter and arguments
@@ -190,6 +190,8 @@ class FormatterEngine:
 		try:
 			precision = int(precision) if precision else 0
 			value = flt(value, precision)
+			if precision == 0:
+				return str(int(value))
 			return str(value)
 		except Exception:
 			return str(value)

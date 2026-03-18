@@ -181,9 +181,10 @@ class VariableParser:
 		Returns:
 			Boolean result of comparison
 		"""
-		# Convert to string for comparison
+		# Convert to string for comparison and sanitize input
+		import html
 		value_str = str(value) if value is not None else ""
-		compare_str = compare_value
+		compare_str = html.escape(str(compare_value).strip())
 
 		# Try numeric comparison if both are numbers
 		try:

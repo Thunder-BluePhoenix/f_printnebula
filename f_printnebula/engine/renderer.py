@@ -5,9 +5,16 @@ import frappe
 import json
 from jinja2 import Template, Environment, BaseLoader
 from typing import Dict, Any, Optional
+from functools import lru_cache
 from .parser import VariableParser
 from .formatter import FormatterEngine
 from .resolver import FieldResolver
+
+
+@lru_cache(maxsize=100)
+def get_jinja_template(content: str):
+	env = Environment(loader=BaseLoader())
+	return env.from_string(content)
 
 
 class TemplateRenderer:
@@ -108,9 +115,8 @@ class TemplateRenderer:
 			Content with loops processed
 		"""
 		try:
-			# Create Jinja2 environment
-			env = Environment(loader=BaseLoader())
-			template = env.from_string(content)
+			# Get template from cache
+			template = get_jinja_template(content)
 
 			# Render with document data
 			rendered = template.render(**doc)
