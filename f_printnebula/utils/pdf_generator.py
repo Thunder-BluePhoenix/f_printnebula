@@ -42,18 +42,47 @@ class PDFGenerator:
 		start_time = time.time()
 
 		try:
-			# Render HTML
-			from f_printnebula.engine.renderer import TemplateRenderer
-			renderer = TemplateRenderer(self.template_name)
-			html_content = renderer.render(docname)
-
-			# Generate based on format
-			if output_format.lower() == "pdf":
-				file_data = self.generate_pdf(html_content, docname, save_file)
-			elif output_format.lower() == "html":
-				file_data = self.generate_html(html_content, docname, save_file)
+			if self.template.template_type == "Word Document":
+				from f_printnebula.engine.word_renderer import WordRenderer
+				renderer = WordRenderer(self.template_name)
+				file_name = f"{self.template.doctype_link}_{docname}_{now()}.docx".replace(" ", "_").replace(":", "-")
+				file_path = os.path.join(get_files_path(), file_name)
+				
+				renderer.render(docname, file_path)
+				
+				if save_file:
+					file_doc = frappe.get_doc({
+						"doctype": "File",
+						"file_name": file_name,
+						"is_private": 1,
+						"file_url": f"/private/files/{file_name}",
+						"attached_to_doctype": self.template.doctype_link,
+						"attached_to_name": docname
+					})
+					file_doc.insert(ignore_permissions=True)
+					file_url = file_doc.file_url
+				else:
+					file_url = None
+					
+				file_data = {
+					'file_url': file_url,
+					'file_size': os.path.getsize(file_path),
+					'file_name': file_name
+				}
+				output_format = "docx"
 			else:
-				frappe.throw(f"Unsupported output format: {output_format}")
+				# Render HTML
+				from f_printnebula.engine.renderer import TemplateRenderer
+				renderer = TemplateRenderer(self.template_name)
+				html_content = renderer.render(docname)
+
+				# Generate based on format
+				if output_format.lower() == "pdf":
+					file_data = self.generate_pdf(html_content, docname, save_file)
+				elif output_format.lower() == "html":
+					file_data = self.generate_html(html_content, docname, save_file)
+				else:
+					frappe.throw(f"Unsupported output format: {output_format}")
 
 			# Calculate generation time
 			generation_time = time.time() - start_time

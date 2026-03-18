@@ -54,6 +54,52 @@ class PrintNebulaTemplate(Document):
 	def on_update(self):
 		"""Handle template updates"""
 		self.update_default_template()
+		self.sync_frappe_print_format()
+
+	def on_trash(self):
+		self.delete_frappe_print_format()
+
+	def get_preview_html(self, docname):
+		"""Returns generated HTML for frappe Print Format integration"""
+		from f_printnebula.engine.renderer import TemplateRenderer
+		renderer = TemplateRenderer(self.name)
+		return renderer.render(docname)
+
+	def sync_frappe_print_format(self):
+		"""Automatically create/update standard Frappe Print Format for native integration"""
+		print_format_name = f"PrintNebula - {self.template_name}"
+		
+		# Prevent recursive saving or missing fields
+		if not self.template_name or not self.doctype_link:
+			return
+			
+		if not frappe.db.exists("Print Format", print_format_name):
+			doc = frappe.new_doc("Print Format")
+			doc.name = print_format_name
+			doc.doc_type = self.doctype_link
+			doc.custom_format = 1
+			doc.print_format_type = "Jinja"
+			doc.module = "F Printnebula" # Link to our module
+		else:
+			doc = frappe.get_doc("Print Format", print_format_name)
+			
+		doc.doc_type = self.doctype_link
+		
+		if self.get("template_type") == "Word Document":
+			doc.html = f"""<div style="text-align: center; padding: 50px;">
+				<h3>Generate Word Document</h3>
+				<p>This is a Word Document Template.</p>
+				<p>Please use the PrintNebula APIs directly to output DOCX payloads.</p>
+			</div>"""
+		else:
+			doc.html = f"{{{{ frappe.get_doc('PrintNebula Template', '{self.name}').get_preview_html(doc.name) }}}}"
+			
+		doc.save(ignore_permissions=True)
+
+	def delete_frappe_print_format(self):
+		print_format_name = f"PrintNebula - {self.template_name}"
+		if frappe.db.exists("Print Format", print_format_name):
+			frappe.delete_doc("Print Format", print_format_name, ignore_permissions=True)
 
 	def update_default_template(self):
 		"""If this is set as default, unset other default templates for the same doctype"""

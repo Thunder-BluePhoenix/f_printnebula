@@ -2,7 +2,13 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("PrintNebula Template", {
+	template_type(frm) {
+		let is_word = frm.doc.template_type === "Word Document";
+		frm.toggle_display(["editor_sections_tab", "styling_tab", "advanced_tab", "conditional_logic_section"], !is_word);
+	},
 	refresh(frm) {
+		frm.trigger('template_type');
+		
 		// Add Live Preview button
 		frm.add_custom_button(__("Live Preview"), () => {
 			let docname = frm.doc.name;

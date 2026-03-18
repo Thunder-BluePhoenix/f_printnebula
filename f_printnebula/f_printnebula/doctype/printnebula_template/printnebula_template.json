@@ -11,6 +11,8 @@
   "basic_info_section",
   "template_name",
   "doctype_link",
+  "template_type",
+  "word_template",
   "column_break_template",
   "is_default",
   "is_active",
@@ -96,6 +98,19 @@
    "label": "Doctype",
    "options": "DocType",
    "reqd": 1
+  },
+  {
+   "default": "HTML Editor",
+   "fieldname": "template_type",
+   "fieldtype": "Select",
+   "label": "Template Type",
+   "options": "HTML Editor\nWord Document"
+  },
+  {
+   "depends_on": "eval:doc.template_type===\"Word Document\"",
+   "fieldname": "word_template",
+   "fieldtype": "Attach",
+   "label": "Word Template (.docx)"
   },
   {
    "fieldname": "column_break_template",
