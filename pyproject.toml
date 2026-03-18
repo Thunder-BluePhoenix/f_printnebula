@@ -9,6 +9,9 @@ readme = "README.md"
 dynamic = ["version"]
 dependencies = [
     "docxtpl",
+    "qrcode",
+    "python-barcode",
+    "Pillow",
     # "frappe~=15.0.0" # Installed and managed by bench.
 ]
 

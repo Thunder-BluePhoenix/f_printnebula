@@ -154,6 +154,13 @@ class TemplateRenderer:
 		Returns:
 			Combined HTML document
 		"""
+		watermark_html = ""
+		if self.template.enable_watermark:
+			if self.template.watermark_image:
+				watermark_html = f'<div class="printnebula-watermark"><img src="{self.template.watermark_image}" style="max-width:100%; max-height:100%;"/></div>'
+			elif self.template.watermark_text:
+				watermark_html = f'<div class="printnebula-watermark text-watermark">{self.template.watermark_text}</div>'
+
 		html_template = f"""
 <!DOCTYPE html>
 <html>
@@ -201,9 +208,30 @@ class TemplateRenderer:
 		th {{
 			background-color: #f2f2f2;
 		}}
+
+		.printnebula-watermark {{
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			opacity: 0.15;
+			z-index: -1;
+			pointer-events: none;
+			text-align: center;
+			width: 100%;
+		}}
+
+		.text-watermark {{
+			font-size: 80pt;
+			font-weight: bold;
+			color: #000;
+			transform: translate(-50%, -50%) rotate(-45deg);
+			white-space: nowrap;
+		}}
 	</style>
 </head>
 <body>
+	{watermark_html}
 	{f'<div class="header">{header}</div>' if self.template.enable_header_footer and header else ''}
 
 	<div class="body">

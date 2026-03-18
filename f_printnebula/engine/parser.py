@@ -42,6 +42,12 @@ class VariableParser:
 		# Parse regular variables
 		content = self.parse_variables(content)
 
+		# Parse math operations {=qty * rate}
+		content = self.parse_math(content)
+
+		# Parse media (QR codes, barcodes)
+		content = self.parse_media(content)
+
 		return content
 
 	def parse_variables(self, content: str) -> str:
@@ -54,26 +60,107 @@ class VariableParser:
 		Returns:
 			Content with variables replaced
 		"""
-		# Pattern: {field_name} or {field_name|formatter:args}
-		pattern = r'\{([a-zA-Z0-9_.]+)(?:\|([a-zA-Z0-9_:]+(?::[^}]+)?))?\}'
+		# Pattern: {field_name} or {field_name|formatter1|formatter2:args}
+		pattern = r'\{([a-zA-Z0-9_.]+)(?:\|([^}]+))?\}'
 
 		def replace_variable(match):
 			field_path = match.group(1)
-			formatter = match.group(2)
+			formatters_str = match.group(2)
 
 			# Get field value
 			value = self.get_field_value(field_path)
 
-			# Apply formatter if specified
-			if formatter and value is not None:
+			# Apply formatters sequentially if specified
+			if formatters_str:
 				from .formatter import FormatterEngine
 				formatter_engine = FormatterEngine()
-				value = formatter_engine.format(value, formatter)
+				formatters = formatters_str.split('|')
+				for formatter in formatters:
+					value = formatter_engine.format(value, formatter)
 
 			# Convert None to empty string
 			return str(value) if value is not None else ""
 
 		return re.sub(pattern, replace_variable, content)
+
+	def parse_math(self, content: str) -> str:
+		pattern = r'\{=([^}]+)\}'
+		def replace_math(match):
+			return self.evaluate_math(match.group(1).strip())
+		return re.sub(pattern, replace_math, content)
+
+	def evaluate_math(self, expr: str) -> str:
+		try:
+			context = self.doc.copy() if hasattr(self.doc, 'copy') else dict(self.doc)
+			
+			def _sum(arr, field=None):
+				if not arr: return 0
+				if field: return sum(frappe.utils.flt(row.get(field)) for row in arr if isinstance(row, dict))
+				# Try direct dict access simulation, or fall back to object access
+				return sum(frappe.utils.flt(getattr(row, field, 0)) if not isinstance(row, dict) else 0 for row in arr) if field else sum(frappe.utils.flt(x) for x in arr)
+				
+			def _avg(arr, field=None):
+				if not arr: return 0
+				return _sum(arr, field) / len(arr)
+				
+			context.update({
+				'sum': _sum,
+				'avg': _avg,
+				'count': lambda arr: len(arr) if arr else 0,
+			})
+
+			res = frappe.safe_eval(expr, None, context)
+			if isinstance(res, float):
+				return str(round(res, 2))
+			return str(res)
+		except Exception as e:
+			frappe.log_error(f"Math Error: {str(e)}", "PrintNebula Parser")
+			return f"[Math Error: {expr}]"
+
+	def parse_media(self, content: str) -> str:
+		pattern_media = r'\{(qrcode|barcode):([^}]+)\}'
+		def replace_media(match):
+			media_type = match.group(1)
+			params = match.group(2).split('|')
+			data = params[0]
+			
+			if media_type == 'qrcode':
+				return self.generate_qrcode(data)
+			else:
+				return self.generate_barcode(data)
+		
+		return re.sub(pattern_media, replace_media, content)
+
+	def generate_qrcode(self, data: str) -> str:
+		try:
+			import qrcode
+			import io
+			import base64
+			qr = qrcode.QRCode(version=1, box_size=4, border=1)
+			qr.add_data(data)
+			qr.make(fit=True)
+			img = qr.make_image(fill_color="black", back_color="white")
+			buffered = io.BytesIO()
+			img.save(buffered, format="PNG")
+			img_str = base64.b64encode(buffered.getvalue()).decode()
+			return f'<img src="data:image/png;base64,{img_str}" class="printnebula-qrcode" />'
+		except Exception as e:
+			return f"[QR Code Error: {str(e)}]"
+
+	def generate_barcode(self, data: str) -> str:
+		try:
+			import barcode
+			from barcode.writer import ImageWriter
+			import io
+			import base64
+			CODE128 = barcode.get_barcode_class('code128')
+			bc = CODE128(data, writer=ImageWriter())
+			buffered = io.BytesIO()
+			bc.write(buffered, options={'module_width': 0.2, 'module_height': 10, 'font_size': 8})
+			img_str = base64.b64encode(buffered.getvalue()).decode()
+			return f'<img src="data:image/png;base64,{img_str}" class="printnebula-barcode" />'
+		except Exception as e:
+			return f"[Barcode Error: {str(e)}]"
 
 	def parse_conditionals(self, content: str) -> str:
 		"""
