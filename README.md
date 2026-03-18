@@ -10,21 +10,22 @@ A powerful, user-friendly template engine that enables non-technical users to cr
 
 ### 🎨 Core Features
 - **Word-like Template Editor**: Rich text editor for creating templates without coding
+- **Native Word Documents (`.docx`)**: Upload Microsoft Word documents directly and inject Frappe data right into them!
+- **Native Print Integration**: Custom templates appear automatically in the default Frappe "Print" buttons!
 - **Curly-Brace Variables**: Simple `{field_name}` syntax for dynamic data insertion
 - **Child Table Loops**: Automatic iteration through child records with `{% for row in items %}...{% endfor %}`
-- **Multi-Section Editing**: Separate Header, Body, and Footer sections
 - **Field Mapping**: Create custom field aliases and transformations
-- **Dynamic PDF Generation**: High-quality PDF output with customizable options
+- **Dynamic File Generation**: High-quality PDF and DOCX output with customizable options
 
 ### 🚀 Advanced Features
+- **Mathematical Expressions**: Add calculations inline `{=qty * rate}` or arrays `{=sum(items.qty)}`
+- **Chained Formatting**: Stack commands indefinitely `{posting_date|date:yyyy|upper}`
+- **QR Codes & Barcodes**: Instantly inject inline base64 graphics via `{qrcode:url}`
+- **Automated Mailer**: Trigger background jobs on-submit to email generated PDFs automatically
+- **Batch Generation Engine**: Beautiful built-in Frappe desk UI for multi-selecting records and exporting zipped PDFs
 - **Conditional Rendering**: Show/hide sections based on field values
-- **Computed Fields**: Calculate values on-the-fly
-- **Custom Formatting**: Date, currency, number formatting with locale support
 - **Template Versioning**: Track all template changes over time
-- **Access Control**: Role-based template permissions
-- **Batch Generation**: Bulk PDF generation with background jobs
 - **Multi-Format Export**: PDF, HTML, DOCX support
-- **Preview Mode**: Real-time preview with sample or actual data
 
 ### 🌍 Additional Features
 - **Multi-Language Support**: i18n ready with translation support
@@ -245,17 +246,32 @@ frappe.call({
 {% endfor %}
 ```
 
+**Math & Aggregations:**
+```
+{=qty * rate}                     → 150.00
+{=sum(items.amount)}              → 4500.00
+{=avg(items.rate)}                → 25.50
+```
+
+**Media Injection:**
+```
+{qrcode:https://example.com}      → [Inline Base64 QR Image]
+{barcode:123456789}               → [Inline Base64 Barcode Image]
+```
+
 ### Formatters
 
 | Formatter | Usage | Example Output |
 |-----------|-------|----------------|
-| `date` | `{date|date:dd-MM-yyyy}` | 18-11-2025 |
-| `currency` | `{amount|currency}` | $1,234.56 |
-| `number` | `{value|number:2}` | 123.45 |
-| `percent` | `{rate|percent:1}` | 15.5% |
-| `upper` | `{text|upper}` | UPPERCASE |
-| `lower` | `{text|lower}` | lowercase |
-| `title` | `{text|title}` | Title Case |
+| `date` | `{date\|date:dd-MM-yyyy}` | 18-11-2025 |
+| `currency` | `{amount\|currency}` | $1,234.56 |
+| `number` | `{value\|number:2}` | 123.45 |
+| `percent` | `{rate\|percent:1}` | 15.5% |
+| `upper` | `{text\|upper}` | UPPERCASE |
+| `lower` | `{text\|lower}` | lowercase |
+| `title` | `{text\|title}` | Title Case |
+
+*Formatters can be chained infinitely: `{value|upper|currency|default:"N/A"}`*
 
 ---
 
@@ -443,6 +459,13 @@ Pre-commit tools:
 
 ## 📝 Changelog
 
+### v1.1.0 (Current)
+- Added `.docx` Microsoft Word native rendering
+- Integrated templates natively into the Frappe standard "Print" UI
+- Introduced `{=math}`, `{qrcode:...}`, and chained formatting logic
+- Added Background Batch Generator UI Page
+- Implemented `on_submit` Document Auto-Mailer
+
 ### v1.0.0 (2025-11-18)
 - Initial release
 - Core template rendering engine
@@ -466,9 +489,7 @@ Pre-commit tools:
 
 For detailed documentation, see:
 - [PRD (Product Requirements Document)](PRD_PrintNebula.md)
-- [API Documentation](docs/API.md) (Coming Soon)
-- [User Guide](docs/USER_GUIDE.md) (Coming Soon)
-- [Developer Guide](docs/DEVELOPER.md) (Coming Soon)
+- [User Guide](USER_GUIDE.md)
 
 ---
 
