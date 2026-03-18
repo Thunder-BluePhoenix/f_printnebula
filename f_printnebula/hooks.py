@@ -146,23 +146,17 @@ doc_events = {
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"f_printnebula.tasks.all"
-# 	],
-# 	"daily": [
-# 		"f_printnebula.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"f_printnebula.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"f_printnebula.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"f_printnebula.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"daily": [
+		"f_printnebula.f_printnebula.api.scheduler.run_daily"
+	],
+	"weekly": [
+		"f_printnebula.f_printnebula.api.scheduler.run_weekly"
+	],
+	"monthly": [
+		"f_printnebula.f_printnebula.api.scheduler.run_monthly"
+	],
+}
 
 # Testing
 # -------

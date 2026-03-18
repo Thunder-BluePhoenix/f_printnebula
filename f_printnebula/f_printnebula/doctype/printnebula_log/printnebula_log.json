@@ -1,0 +1,78 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-19 05:23:52.039705",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "template",
+  "doctype_link",
+  "docname",
+  "status",
+  "duration",
+  "error_log"
+ ],
+ "fields": [
+  {
+   "fieldname": "template",
+   "fieldtype": "Data",
+   "label": "Template"
+  },
+  {
+   "fieldname": "doctype_link",
+   "fieldtype": "Link",
+   "label": "Target DocType",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "docname",
+   "fieldtype": "Dynamic Link",
+   "label": "Document Name",
+   "options": "doctype_link"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Success\nFailed"
+  },
+  {
+   "fieldname": "duration",
+   "fieldtype": "Float",
+   "label": "Duration (s)"
+  },
+  {
+   "fieldname": "error_log",
+   "fieldtype": "Text",
+   "label": "Error Log"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-03-19 05:23:52.039705",
+ "modified_by": "Administrator",
+ "module": "F Printnebula",
+ "name": "PrintNebula Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "All",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

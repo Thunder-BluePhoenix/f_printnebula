@@ -36,7 +36,10 @@ class VariableParser:
 		if not content:
 			return ""
 
-		# Parse conditional blocks first
+		# Extract global Snippets first!
+		content = self.parse_snippets(content)
+
+		# Parse conditional blocks
 		content = self.parse_conditionals(content)
 
 		# Parse regular variables
@@ -49,6 +52,25 @@ class VariableParser:
 		content = self.parse_media(content)
 
 		return content
+
+	def parse_snippets(self, content: str) -> str:
+		"""
+		Parse {snippet:MyName} and instantly replace logic pulling from database prior to generic parsing algorithms
+		"""
+		pattern = r'\{snippet:([^}]+)\}'
+
+		def replace_snippet(match):
+			snippet_name = match.group(1).strip()
+			try:
+				html_content = frappe.db.get_value("PrintNebula Snippet", snippet_name, "html_content")
+				if html_content:
+					# Support nested snippets flawlessly
+					return self.parse_snippets(html_content)
+				return f"<!-- Snippet '{snippet_name}' not found -->"
+			except Exception as e:
+				return f"<!-- Snippet '{snippet_name}' error: {str(e)} -->"
+
+		return re.sub(pattern, replace_snippet, content)
 
 	def parse_variables(self, content: str) -> str:
 		"""

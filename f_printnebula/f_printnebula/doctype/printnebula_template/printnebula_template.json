@@ -61,6 +61,10 @@
   "column_break_locale",
   "number_format",
   "currency_format",
+  "scheduled_generation_tab",
+  "enable_scheduled_generation",
+  "schedule_frequency",
+  "schedule_filters",
   "version_control_tab",
   "version_section",
   "version",
@@ -398,6 +402,31 @@
    "fieldname": "currency_format",
    "fieldtype": "Data",
    "label": "Currency Format"
+  },
+  {
+   "fieldname": "scheduled_generation_tab",
+   "fieldtype": "Tab Break",
+   "label": "Scheduled Generation"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_scheduled_generation",
+   "fieldtype": "Check",
+   "label": "Enable Scheduled Generation"
+  },
+  {
+   "depends_on": "eval:doc.enable_scheduled_generation == 1",
+   "fieldname": "schedule_frequency",
+   "fieldtype": "Select",
+   "label": "Schedule Frequency",
+   "options": "Daily\nWeekly\nMonthly"
+  },
+  {
+   "depends_on": "eval:doc.enable_scheduled_generation == 1",
+   "fieldname": "schedule_filters",
+   "fieldtype": "Code",
+   "label": "Schedule Filters (JSON)",
+   "options": "JSON"
   },
   {
    "fieldname": "version_control_tab",

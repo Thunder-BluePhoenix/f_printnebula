@@ -40,7 +40,10 @@ class PDFGenerator:
 			Dictionary with file info
 		"""
 		start_time = time.time()
-
+		status = "Success"
+		error_msg = ""
+		file_data = {}
+		
 		try:
 			if self.template.template_type == "Word Document":
 				from f_printnebula.engine.word_renderer import WordRenderer
@@ -83,45 +86,34 @@ class PDFGenerator:
 					file_data = self.generate_html(html_content, docname, save_file)
 				else:
 					frappe.throw(f"Unsupported output format: {output_format}")
-
-			# Calculate generation time
-			generation_time = time.time() - start_time
-
-			# Update template usage
-			template_doc = frappe.get_doc("PrintNebula Template", self.template_name)
-			template_doc.increment_usage_count()
-
-			# Log generation
-			self.log_generation(
-				docname=docname,
-				generation_time=generation_time,
-				file_size=file_data.get('file_size', 0),
-				file_url=file_data.get('file_url'),
-				format=output_format,
-				status="Success"
-			)
-
 			return {
 				'success': True,
 				'file_url': file_data.get('file_url'),
 				'file_size': file_data.get('file_size'),
-				'generation_time': round(generation_time, 3),
 				'format': output_format
 			}
-
 		except Exception as e:
-			# Log error
-			self.log_generation(
-				docname=docname,
-				generation_time=time.time() - start_time,
-				file_size=0,
-				file_url=None,
-				format=output_format,
-				status="Failed",
-				error_message=str(e)
-			)
-
+			status = "Failed"
+			error_msg = str(e)
 			frappe.throw(f"PDF generation failed: {str(e)}")
+		finally:
+			# Log generation metrics
+			duration = time.time() - start_time
+			file_url = file_data.get('file_url', "")
+			try:
+				import frappe.utils.background_jobs
+				frappe.enqueue(
+					"f_printnebula.api.automation.log_generation",
+					queue="short",
+					template=self.template_name,
+					doctype_link=self.template.doctype_link,
+					docname=docname,
+					status=status,
+					duration=duration,
+					error_log=error_msg
+				)
+			except Exception:
+				pass
 
 	def generate_pdf(self, html_content: str, docname: str, save_file: bool) -> Dict:
 		"""
@@ -230,43 +222,3 @@ class PDFGenerator:
 
 		return options
 
-	def log_generation(
-		self,
-		docname: str,
-		generation_time: float,
-		file_size: int,
-		file_url: Optional[str],
-		format: str,
-		status: str,
-		error_message: str = None
-	):
-		"""
-		Log PDF generation event
-
-		Args:
-			docname: Document name
-			generation_time: Time taken to generate
-			file_size: File size in bytes
-			file_url: URL to generated file
-			format: Output format
-			status: Generation status
-			error_message: Error message if failed
-		"""
-		try:
-			log = frappe.get_doc({
-				"doctype": "PrintNebula Generation Log",
-				"template": self.template_name,
-				"doctype_ref": self.template.doctype_link,
-				"document_name": docname,
-				"generated_by": frappe.session.user,
-				"timestamp": now(),
-				"generation_time": generation_time,
-				"file_size": file_size,
-				"format": format,
-				"status": status,
-				"error_message": error_message,
-				"file_url": file_url
-			})
-			log.insert(ignore_permissions=True)
-		except Exception as e:
-			frappe.log_error(f"Failed to log generation: {str(e)}", "PrintNebula Log Error")
