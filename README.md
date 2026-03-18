@@ -14,18 +14,23 @@ A powerful, user-friendly template engine that enables non-technical users to cr
 - **Native Print Integration**: Custom templates appear automatically in the default Frappe "Print" buttons!
 - **Curly-Brace Variables**: Simple `{field_name}` syntax for dynamic data insertion
 - **Child Table Loops**: Automatic iteration through child records with `{% for row in items %}...{% endfor %}`
+- **Multi-Section Editing**: Separate Header, Body, and Footer sections
 - **Field Mapping**: Create custom field aliases and transformations
 - **Dynamic File Generation**: High-quality PDF and DOCX output with customizable options
 
 ### 🚀 Advanced Features
 - **Mathematical Expressions**: Add calculations inline `{=qty * rate}` or arrays `{=sum(items.qty)}`
 - **Chained Formatting**: Stack commands indefinitely `{posting_date|date:yyyy|upper}`
+- **Custom Formatting**: Date, currency, number formatting with locale support
 - **QR Codes & Barcodes**: Instantly inject inline base64 graphics via `{qrcode:url}`
 - **Automated Mailer**: Trigger background jobs on-submit to email generated PDFs automatically
 - **Batch Generation Engine**: Beautiful built-in Frappe desk UI for multi-selecting records and exporting zipped PDFs
 - **Conditional Rendering**: Show/hide sections based on field values
+- **Computed Fields**: Calculate values on-the-fly
 - **Template Versioning**: Track all template changes over time
+- **Access Control**: Role-based template permissions
 - **Multi-Format Export**: PDF, HTML, DOCX support
+- **Preview Mode**: Real-time preview with sample or actual data
 
 ### 🌍 Additional Features
 - **Multi-Language Support**: i18n ready with translation support
