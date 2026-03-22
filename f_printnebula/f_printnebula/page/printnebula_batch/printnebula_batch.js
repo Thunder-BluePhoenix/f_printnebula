@@ -80,7 +80,7 @@ function render_ui(page) {
 			if (r.message) {
 				let doctypes = [...new Set(r.message.map(d => d.doctype_link))];
 				let html = '<option value="">-- Select Doctype --</option>';
-				doctypes.forEach(d => { html += \`<option value="\${d}">\${d}</option>\`; });
+				doctypes.forEach(d => { html += `<option value="${d}">${d}</option>`; });
 				$('#pn-doctype-select').html(html);
 			}
 		}
@@ -100,7 +100,7 @@ function render_ui(page) {
 			callback: function(r) {
 				if (r.message) {
 					let html = '<option value="">-- Select Template --</option>';
-					r.message.forEach(t => { html += \`<option value="\${t.name}">\${t.template_name}</option>\`; });
+					r.message.forEach(t => { html += `<option value="${t.name}">${t.template_name}</option>`; });
 					$('#pn-template-select').html(html).prop('disabled', false);
 					$('#pn-fetch-docs').prop('disabled', false);
 				}
@@ -126,13 +126,13 @@ function render_ui(page) {
 				if (r.message && r.message.length > 0) {
 					let html = '';
 					r.message.forEach(d => {
-						html += \`
+						html += `
 							<tr>
-								<td><input type="checkbox" class="pn-doc-row" value="\${d.name}"></td>
-								<td>\${d.name}</td>
+								<td><input type="checkbox" class="pn-doc-row" value="${d.name}"></td>
+								<td>${d.name}</td>
 								<td class="pn-status">Pending</td>
 							</tr>
-						\`;
+						`;
 					});
 					$('#pn-docs-body').html(html);
 					$('#pn-generate-batch').prop('disabled', false);
@@ -198,7 +198,7 @@ function render_ui(page) {
 						
 						if (r.message.status === 'Completed') {
 							clearInterval(interval);
-							frappe.msgprint(\`Batch Generation Complete. <a href="\${r.message.file_url}" target="_blank">Download ZIP</a>\`);
+							frappe.msgprint(`Batch Generation Complete. <a href="${r.message.file_url}" target="_blank">Download ZIP</a>`);
 							$('#pn-generate-batch').prop('disabled', false);
 						} else if (r.message.status === 'Failed') {
 							clearInterval(interval);
